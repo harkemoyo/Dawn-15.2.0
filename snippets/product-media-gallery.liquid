@@ -123,27 +123,18 @@
             %}
           </li>
         {%- endunless -%}
-      {%- endfor -%}
-      {%- for variant in product.variants -%}
-        {%- assign variant_images = variant.metafields.custom.variant_images.value -%}
-
-        {%- for variant_media in variant_images -%}
+      {%- endfor -%} 
+      {% comment %} {%- for variant in product.variants -%}
+        {%- for image in variant.metafields.custom.variant_images.value -%}
+         {% assign media = image %}
           <li
-            class="thumbnail-list__item slider__slide"
+            class="thumbnail-list__item"
             id="Slide-{{ section.id }}-{{ variant.id }}"
             data-variant-id="{{ variant.id }}"
             style="{% unless product.selected_or_first_available_variant.id == variant.id %} display: none;{% endunless %}"
           >
-            {%- liquid
-              assign media_position = media_position | default: 0 | plus: 1
-              assign lazy_load = false
-              if media_position > 1
-                assign lazy_load = true
-              endif
-            -%}
-
             <img
-              src="{{ variant_media | image_url: width: 450 }}"
+              src="{{ media | image_url: width: 100 }}"
               alt="Image for {{ variant.title }}"
               height=""
               width=""
@@ -151,7 +142,7 @@
             >
           </li>
         {%- endfor -%}
-      {%- endfor -%}
+      {%- endfor -%} {% endcomment %}
     </ul>
     <div class="slider-buttons quick-add-hidden{% if hide_mobile_slider %} small-hide{% endif %}">
       <button
@@ -279,7 +270,7 @@
             </button>
           </li>
         {%- endif -%}
-        {%- for media in product.media -%}
+        {% comment %} {%- for media in product.media -%}
           {%- unless media.id == product.selected_or_first_available_variant.featured_media.id -%}
             {%- liquid
               capture media_index
@@ -341,7 +332,27 @@
               </button>
             </li>
           {%- endunless -%}
-        {%- endfor -%}
+        {%- endfor -%} {% endcomment %}
+        {%- for variant in product.variants -%}
+           {%- for image in variant.metafields.custom.variant_images.value -%}
+             {% assign media = image %}
+            <li
+              class=""
+              id="Slide-{{ section.id }}-{{ variant.id }}"
+              data-variant-id="{{ variant.id }}"
+              style="{% unless product.selected_or_first_available_variant.id == variant.id %} display: none;{% endunless %}"
+            >
+  
+              <img
+                src="{{ media | image_url: width: 100 }}"
+                alt="Image for {{ variant.title }}"
+                height=""
+                width=""
+                loading="{% if lazy_load %}lazy{% else %}eager{% endif %}"
+              >
+            </li>
+          {%- endfor -%}
+        {%- endfor -%} 
       </ul>
       <button
         type="button"
