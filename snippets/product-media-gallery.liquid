@@ -85,7 +85,7 @@
           %}
         </li>
       {%- endif -%}
-      {%- for media in product.media -%}
+      {% comment %} {%- for media in product.media -%}
         {% if media_position >= limit
           or media_position >= 1
           and section.settings.hide_variants
@@ -123,8 +123,8 @@
             %}
           </li>
         {%- endunless -%}
-      {%- endfor -%} 
-      {% comment %} {%- for variant in product.variants -%}
+      {%- endfor -%}  {% endcomment %}
+       {% comment %} {%- for variant in product.variants -%}
         {%- for image in variant.metafields.custom.variant_images.value -%}
          {% assign media = image %}
           <li
@@ -142,7 +142,7 @@
             >
           </li>
         {%- endfor -%}
-      {%- endfor -%} {% endcomment %}
+       {%- endfor -%}  {% endcomment %}
     </ul>
     <div class="slider-buttons quick-add-hidden{% if hide_mobile_slider %} small-hide{% endif %}">
       <button
@@ -332,13 +332,13 @@
               </button>
             </li>
           {%- endunless -%}
-        {%- endfor -%} {% endcomment %}
+        {%- endfor -%}  {% endcomment %}
         {%- for variant in product.variants -%}
            {%- for image in variant.metafields.custom.variant_images.value -%}
              {% assign media = image %}
             <li
-              class=""
-              id="Slide-{{ section.id }}-{{ variant.id }}"
+              class=" js-variant-swap"
+              id="Slide-{{ section.id }}"
               data-variant-id="{{ variant.id }}"
               style="{% unless product.selected_or_first_available_variant.id == variant.id %} display: none;{% endunless %}"
             >
@@ -369,3 +369,39 @@
     </slider-component>
   {%- endif -%}
 </media-gallery>
+<script>
+  // Initialize the selectedVariant from the Liquid `product` object if available
+  window.selectedVariant = "{{ product.selected_or_first_available_variant.id }}";
+
+  document.addEventListener("DOMContentLoaded", function() {
+    // Define a function to handle variant image swapping
+    function swapVariantImg() {
+    const mediaList = document.querySelectorAll(".product__media-list li img")
+    console.log("swapping", mediaList);
+    
+    mediaList.forEach( img => {
+      if (img.dataset.variantId === window.selectedVariant) {
+        img.style.display = "none";
+      } else {
+        img.style.display = "block";
+      }
+    })
+    
+      if (this.dataset.variantId) {
+        window.selectedVariant = this.dataset.variantId;
+        console.log("Selected variant ID:", this.dataset.variantId);
+      } else {
+        console.error("No variant ID found on the clicked element.");
+      }
+    }
+
+    // Select all elements with a `data-variant-id` attribute and add event listeners
+    const variantElements = document.querySelectorAll(".js-variant-options");
+    variantElements.forEach(function(element) {
+      element.addEventListener("click", swapVariantImg);
+    });
+
+    // Log initial variant to verify it's set correctly
+    console.log("Initial selected variant:", window.selectedVariant);
+  });
+</script>

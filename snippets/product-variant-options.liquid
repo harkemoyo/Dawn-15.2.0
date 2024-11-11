@@ -91,7 +91,10 @@
       {% endif %}
       {{ input_dataset }}
     >
-    <label for="{{ input_id }}">
+    <label 
+    data-variant-id = "{{ product.variants.forloop.index0.id }}"
+    class="js-variant-options"
+    for="{{ input_id }}">
       {{ value -}}
       {{ label_unavailable }}
     </label>

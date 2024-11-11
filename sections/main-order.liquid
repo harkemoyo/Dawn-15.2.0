@@ -46,6 +46,7 @@
         </thead>
         <tbody role="rowgroup">
           {%- for line_item in order.line_items -%}
+          <h1>{{ line_item }}</h1>
             <tr role="row">
               <td
                 id="Row{{ line_item.key }}"

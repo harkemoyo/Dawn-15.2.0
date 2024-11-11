@@ -136,6 +136,11 @@
                 <div {{ block.shopify_attributes }}>
                   {%- assign product_form_installment_id = 'product-form-installment-' | append: section.id -%}
                   {%- form 'product', product, id: product_form_installment_id, class: 'installment caption-large' -%}
+                    {% comment %} Sh Update {% endcomment %}
+                    <p class="line-item-property__field">
+                      <label for="product-bundle-url">product bundle url </label>
+                      <input id="product-bundle-url" form="{{ product_form_id }}" value="{{ product.url }}" type="text" name="properties[product bundle url ]">
+                    </p>
                     <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
                     {{ form | payment_terms }}
                   {%- endform -%}
