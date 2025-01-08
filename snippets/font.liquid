@@ -1,0 +1,50 @@
+<!-- snippets/sh-fonts.liquid -->
+
+{% comment %} 
+    This snippet is used to load the below custom fonts
+     - 'UncutSans-Book' 
+     - aesthet-nova(font weight 300)
+{% endcomment %}
+
+<link rel="preconnect" href="https://use.typekit.net">
+<link rel="stylesheet" href="https://use.typekit.net/ask4exv.css"> 
+
+
+{% style %}
+@font-face {
+    font-family: "UncutSans";
+    font-style: normal;
+    font-display:swap;
+    font-weight: 400;
+    src: url('{{ "UncutSans-Regular.woff2" | asset_url }}') format('woff2'),
+            url('{{ "UncutSans-Regular.woff" | asset_url }}') format('woff');
+}
+
+@font-face {
+    font-family: "UncutSans-Bold";
+    font-style: normal;
+    font-display:swap;
+    font-weight: 700;
+    src: url('{{ "UncutSans-Bold.woff2" | asset_url }}') format('woff2'),
+            url('{{ "UncutSans-Bold.woff" | asset_url }}') format('woff');
+}
+
+@font-face {
+    font-family: "UncutSans-Medium";
+    font-style: normal;
+    font-display:swap;
+    font-weight: 700;
+    src: url('{{ "UncutSans-Medium.woff2" | asset_url }}') format('woff2'),
+            url('{{ "UncutSans-Medium.woff" | asset_url }}') format('woff');
+}
+
+@font-face {
+    font-family: "UncutSans-Book";
+    font-style: normal;
+    font-display:swap;
+    font-weight: 400;
+    src: url('{{ "UncutSans-Books.woff" | asset_url }}') format('woff2'),
+            url('{{ "UncutSans-Books.woff" | asset_url }}') format('woff');
+}
+
+{% endstyle %}

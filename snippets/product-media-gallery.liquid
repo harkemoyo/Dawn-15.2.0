@@ -370,38 +370,65 @@
   {%- endif -%}
 </media-gallery>
 <script>
-  // Initialize the selectedVariant from the Liquid `product` object if available
-  window.selectedVariant = "{{ product.selected_or_first_available_variant.id }}";
+// Initialize the selectedVariant from the Liquid `product` object if available
+window.selectedVariant = "{{ product.selected_or_first_available_variant.id }}";
 
-  document.addEventListener("DOMContentLoaded", function() {
-    // Define a function to handle variant image swapping
-    function swapVariantImg() {
-    const mediaList = document.querySelectorAll(".product__media-list li img")
-    console.log("swapping", mediaList);
-    
-    mediaList.forEach( img => {
-      if (img.dataset.variantId === window.selectedVariant) {
-        img.style.display = "none";
-      } else {
-        img.style.display = "block";
-      }
-    })
-    
-      if (this.dataset.variantId) {
-        window.selectedVariant = this.dataset.variantId;
-        console.log("Selected variant ID:", this.dataset.variantId);
-      } else {
-        console.error("No variant ID found on the clicked element.");
-      }
-    }
+document.addEventListener("DOMContentLoaded", function () {
+  // Function to handle variant image swapping
+  function swapVariantImg(event) {
+    const mediaList = document.querySelectorAll(".thumbnail-list__item");
 
-    // Select all elements with a `data-variant-id` attribute and add event listeners
-    const variantElements = document.querySelectorAll(".js-variant-options");
-    variantElements.forEach(function(element) {
-      element.addEventListener("click", swapVariantImg);
+    // Ensure each media element's visibility is toggled
+    mediaList.forEach((imgWrapper) => {
+      if (imgWrapper.dataset.variantId === window.selectedVariant) {
+        imgWrapper.style.display = "block"; // Show selected variant images
+      } else {
+        imgWrapper.style.display = "none"; // Hide other variant images
+      }
     });
 
-    // Log initial variant to verify it's set correctly
-    console.log("Initial selected variant:", window.selectedVariant);
+    // Update the selected variant based on the clicked element
+    if (event.currentTarget.dataset.variantId) {
+      window.selectedVariant = event.currentTarget.dataset.variantId;
+
+      // Dispatch a custom event to notify other components (e.g., media gallery)
+      const variantChangeEvent = new CustomEvent("variantChange", {
+        detail: { variantId: window.selectedVariant },
+      });
+      document.dispatchEvent(variantChangeEvent);
+
+      console.log("Selected variant ID:", window.selectedVariant);
+    } else {
+      console.error("No variant ID found on the clicked element.");
+    }
+  }
+
+  // Select all elements that represent variant options
+  const variantElements = document.querySelectorAll(".js-variant-options");
+
+  // Add click event listeners to each variant option
+  variantElements.forEach((element) => {
+    element.addEventListener("click", swapVariantImg);
   });
+
+  // Log initial variant to verify it's set correctly
+  console.log("Initial selected variant:", window.selectedVariant);
+});
+
+// Listen for the custom event in the Media Gallery component
+document.addEventListener("variantChange", function (event) {
+  const mediaGallery = document.querySelector("media-gallery");
+  if (mediaGallery) {
+    const { variantId } = event.detail;
+    // Trigger the media gallery to update its active media
+    mediaGallery.dispatchEvent(
+      new CustomEvent("slideChanged", {
+        detail: { currentElement: { dataset: { mediaId: variantId } } },
+      })
+    );
+  }
+});
+
+
+
 </script>
