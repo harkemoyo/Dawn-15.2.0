@@ -1,27 +1,31 @@
 <div class="page-width">
+    <table>
         <thead>
-           
+            <tr>
+                {% content_for "blocks" %}
+            </tr>
         </thead>
-        {% content_for "blocks" %}
         <tbody>
+            <tr>
+            </tr>
         </tbody>
+    </table>
 </div>
 
 {% schema %}
 {
     "name": "Table Block Section",
-    "settings": [
-        
-        ],
-        "blocks": [
-            {
-                "type": "table-row"
-            }
-        ],
-        "presets": [
-            {
-                "name": "Table Block Section"
-            }
-        ]
+    "settings": [],
+    "blocks": [
+        {
+            "type": "table-cell",
+            "name": "Table Cell"
+        }
+    ],
+    "presets": [
+        {
+            "name": "Table Block Section"
+        }
+    ]
 }
 {% endschema %}
