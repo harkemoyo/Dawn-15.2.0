@@ -1,14 +1,11 @@
 <div class="page-width">
     <table>
-        <thead>
-            <tr>
-                {% content_for "blocks" %}
-            </tr>
-        </thead>
+        <table {{ block.shopify_attributes }}>
+    {% content_for "block", type: "table-header", id: "table_header" %}
         <tbody>
-            <tr>
-            </tr>
+            {% content_for "blocks"%}
         </tbody>
+    </table>
     </table>
 </div>
 
@@ -18,8 +15,7 @@
     "settings": [],
     "blocks": [
         {
-            "type": "table-cell",
-            "name": "Table Cell"
+            "type": "table-row"
         }
     ],
     "presets": [
