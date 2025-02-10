@@ -1,5 +1,5 @@
-<thead>
-    <tr {{ block.shopify_attributes }}>
+<thead {{ block.shopify_attributes }}>
+    <tr>
     {% content_for "blocks" %}
     </tr>
 </thead>
@@ -11,7 +11,7 @@
         ],
         "blocks": [
             {
-                "type": "table-cell",
+                "type": "table-cell"
             }
         ],
         "presets": [
