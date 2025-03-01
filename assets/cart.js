@@ -5,9 +5,12 @@ class CartRemoveButton extends HTMLElement {
     this.addEventListener('click', (event) => {
       event.preventDefault();
       const cartItems = this.closest('cart-items') || this.closest('cart-drawer-items');
+      console.log('Remove button clicked - Cart Items:', cartItems);
+      console.log('Item index to remove:', this.dataset.index);
       cartItems.updateQuantity(this.dataset.index, 0);
     });
   }
+  
 }
 
 customElements.define('cart-remove-button', CartRemoveButton);
@@ -17,6 +20,9 @@ class CartItems extends HTMLElement {
     super();
     this.lineItemStatusElement =
       document.getElementById('shopping-cart-line-item-status') || document.getElementById('CartDrawer-LineItemStatus');
+    console.log('Cart Items Component Initialized');
+    console.log('Line Item Status Element:', this.lineItemStatusElement);
+    console.log('Current Cart Items:', this.querySelectorAll('.cart-item'));
 
     const debouncedOnChange = debounce((event) => {
       this.onChange(event);
@@ -44,6 +50,8 @@ class CartItems extends HTMLElement {
 
   resetQuantityInput(id) {
     const input = this.querySelector(`#Quantity-${id}`);
+    console.log("input", input);
+    
     input.value = input.getAttribute('value');
     this.isEnterPressed = false;
   }
@@ -92,6 +100,8 @@ class CartItems extends HTMLElement {
         .then((response) => response.text())
         .then((responseText) => {
           const html = new DOMParser().parseFromString(responseText, 'text/html');
+          console.log("html", html);
+          
           const selectors = ['cart-drawer-items', '.cart-drawer__footer'];
           for (const selector of selectors) {
             const targetElement = document.querySelector(selector);
@@ -197,6 +207,9 @@ class CartItems extends HTMLElement {
 
         const lineItem =
           document.getElementById(`CartItem-${line}`) || document.getElementById(`CartDrawer-Item-${line}`);
+
+          console.log("lineItem", lineItem);
+          
         if (lineItem && lineItem.querySelector(`[name="${name}"]`)) {
           cartDrawerWrapper
             ? trapFocus(cartDrawerWrapper, lineItem.querySelector(`[name="${name}"]`))
@@ -223,6 +236,7 @@ class CartItems extends HTMLElement {
     const lineItemError =
       document.getElementById(`Line-item-error-${line}`) || document.getElementById(`CartDrawer-LineItemError-${line}`);
     if (lineItemError) lineItemError.querySelector('.cart-item__error-text').textContent = message;
+console.log("lineItemError", lineItemError);
 
     this.lineItemStatusElement.setAttribute('aria-hidden', true);
 
