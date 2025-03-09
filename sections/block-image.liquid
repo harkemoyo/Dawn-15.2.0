@@ -1,0 +1,29 @@
+<!--sections/ Block Image -->
+{% assign block = section.blocks %}
+<div class="page-width" {{ block.shopify_attributes }}>
+    <img src="{{ block.settings.image | image_url: width: 1500 }}"
+     alt="{{ block.settings.image.alt | escape }}"
+     height="{{ block.settings.image.height }}"
+     width="{{ block.settings.image.width }}">
+</div>
+{% schema %}
+{   "name": "Block Image",  
+    "tag": "section",
+    "class": "block-image",
+    "settings": [   
+        ],
+        "blocks": [  
+            {   "type": "image",  
+                "name": "Image", 
+                "limit": 1,
+                "settings" : [
+                    {
+                    "type": "image_picker",
+                    "id": "image",
+                    "label": "Image"
+                }
+            ]
+            } 
+        ]  
+}
+{% endschema %}

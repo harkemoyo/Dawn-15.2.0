@@ -171,6 +171,36 @@
         "name": "list.metaobject_reference",
         "category": "REFERENCE"
       }
+    },
+    {
+      "key": "complementary_products",
+      "namespace": "globo--filter--product_recommendation",
+      "name": "Complementary products",
+      "description": null,
+      "type": {
+        "name": "list.product_reference",
+        "category": "REFERENCE"
+      }
+    },
+    {
+      "key": "related_products",
+      "namespace": "globo--filter--product_recommendation",
+      "name": "Related products",
+      "description": null,
+      "type": {
+        "name": "list.product_reference",
+        "category": "REFERENCE"
+      }
+    },
+    {
+      "key": "bought_together_products",
+      "namespace": "globo--filter--product_recommendation",
+      "name": "Bought together products",
+      "description": null,
+      "type": {
+        "name": "list.product_reference",
+        "category": "REFERENCE"
+      }
     }
   ],
   "variant": [

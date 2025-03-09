@@ -11,7 +11,19 @@
 {% schema %}
 {
     "name": "Table Block Section",
-    "settings": [],
+    "settings": [
+        {
+            "type": "text",
+            "id": "title",
+            "default": "Table Block Section",
+            "label": "Table Block Section"
+        },
+        {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Image"
+        }
+    ],
     "blocks": [
         {
             "type": "table-row"

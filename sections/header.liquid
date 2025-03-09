@@ -11,7 +11,24 @@
   <link rel="stylesheet" href="{{ 'component-mega-menu.css' | asset_url }}" media="print" onload="this.media='all'">
 {%- endif -%}
 
+Hi hark
+{% assign table_blocks = shop.metaobjects['product_highlight'].values %}
+<h1> Hi Hark {{ table_blocks }}</h1>
+{% for block in table_blocks %}
+  <p>Hi Hark, the vegetable is {{ block.system.handle}}</p>
+  <p>Hi Hark count {{ block.system.list? }}</p>
+{% endfor %}
+{% assign variable = product.metafields.custom.details.value %}
+<h1>{{ variable }}</h1>
+{% for metaobject in variable %}
+  {{ metaobject.system.handle }}
+{% endfor %}
 
+<h1> Hi Hark {{ metaobjects['type']['handle'] }}</h1>
+{% assign testimonials = shop.metaobjects["vegetable"] %}
+{% for testimonial in testimonials %}
+  <p>Hi Hark {{ testimonial.added_by.value }}</p>
+{% endfor %}
 <style>
   header-drawer {
     justify-self: start;
