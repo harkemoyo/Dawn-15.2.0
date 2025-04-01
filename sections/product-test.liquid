@@ -1,0 +1,106 @@
+<section id="product" data-product-url="{{ product.url }}" data-section-id="{{ section.id }}">
+  <h2>{{ product.title }}</h2>
+  <div class="price">
+    {{ product.price | money }}
+  </div>
+  <!-- ...other product info... -->
+
+  <div class="optionValueSelectors">
+    <!-- Use options_with_values to render options -->
+    {%- for option in product.options_with_values -%}
+      <fieldset class="option">
+        <legend>{{ option.name }}</legend>
+
+        {%- for option_value in option.values -%}
+          {%- capture input_id -%}
+            {{ section.id }}-{{ option.position }}-{{ forloop.index0 -}}
+          {%- endcapture -%}
+
+          <!-- Use product_option_value` fields to simplify option value input rendering and support combined listings -->
+          <input
+            type="radio"
+            id="{{ input_id }}"
+            name="{{ option.name }}"
+            value="{{ option_value | escape }}"
+            {% if option_value.selected %}
+              checked
+            {% endif %}
+            {% unless option_value.available %}
+              class="disabled"
+            {% endunless %}
+            data-product-url="{{ option_value.product_url }}"
+            data-option-value-id="{{ option_value.id }}"
+          />
+
+          <label for="{{ input_id }}">
+            {{ option_value -}}
+          </label>
+        {%- endfor -%}
+      </fieldset>
+    {%- endfor -%}
+  </div>
+</section>
+
+<script>
+  ...
+  function onVariantChange(event) {
+    const productElement = event.target.closest('#product');
+    const sectionId = productElement.dataset.sectionId;
+
+    // Combined listings: We use old and new product urls to determine if the product should change
+    const oldProductUrl = productElement.dataset.productUrl;
+    const newProductUrl = optionValueElement.dataset.productUrl;
+
+    // Get the selected option value IDs and format as query param
+    const selectedOptionValues = Array.from(
+      optionValueSelectors.querySelectorAll('fieldset input:checked')
+      ).map(({dataset}) => dataset.optionValueId);
+    const params = selectedOptionValues.length > 0
+      ? `&option_values=${selectedOptionValues.join(',')}`
+      : '';
+
+    // Deferred variants: Fetch the option value picker with the new availability state when remaining on the same product
+    // Combined listings: Fetch the product associated with the selected option value and replace the entire product if switching to a sibling product
+    fetch(`${newProductUrl}?section_id=${sectionId}${params}`)
+      .then((response) => response.text())
+      .then((responseText) => {
+        const html = new DOMParser().parseFromString(responseText, 'text/html');
+
+        // Combined listings: If the product changed, replace the old product section with the new product section
+        if (newProductUrl && oldProductUrl !== newProductUrl) {
+          productElement.parentNode.insertBefore(html.querySelector('#product'), productElement);
+          productElement.remove();
+
+          // Focus the input for the last clicked option value
+          document.querySelector(`#${event.target.id}`).focus();
+
+          return;
+        }
+
+        const optionValueSelectors = event.target.closest('.optionValueSelectors');
+        optionValueSelectors.innerHTML = html.querySelector('.optionValueSelectors').innerHTML;
+        document.querySelector(`#${event.target.id}`).focus();
+
+        // Update any other sections that depend on the option value picker
+      });
+  }
+</script>
+
+
+{% schema %}
+    {
+  "name": "Product Test",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+
+  ],
+  "presets": [
+    {
+      "name": "Product Test"
+    }
+  ]
+
+
+    }
+{% endschema %}
